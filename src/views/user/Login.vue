@@ -59,7 +59,7 @@ export default {
                               type:"success"
                           });
                           sessionStorage.setItem('user',JSON.stringify(user));
-                          this.$router.push({path:'/index'});
+                          this.$router.push({path:'/personal'});
                           this.$router.go(0);
                       }
                   });

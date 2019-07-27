@@ -6,7 +6,7 @@
           <el-badge :value="item.riskLevel" class="item">
             <span style="font-size: 26px;font-family: 'Microsoft YaHei';font-weight: bold">{{item.productName}}</span>
           </el-badge>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="opendialog(item)">购买</el-button>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="opendialog(item)">购买</el-button>
         </div>
         <div>
           <p>
@@ -33,6 +33,13 @@
         <el-form-item label="购买金额" prop="pay" style="margin-top: 50px">
           <el-input type="text" auto-complete="off" :placeholder=notice v-model="buyForm.pay"></el-input>
         </el-form-item>
+        <div style="text-align:center;margin-top: 20px">
+          <el-form-item label="支付卡号" prop="card">
+            <el-select v-model="buyForm.cardId" placeholder="卡号" >
+              <el-option v-for="item in cardList" :key="item" :label="item" :value="item"></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
         <div style="text-align:center;margin-top: 20px" v-show="timeVisible">
           <el-form-item label="定投周期" prop="time" >
             <el-select v-model="buyForm.time" placeholder="周期">
@@ -40,12 +47,11 @@
               <el-option key="2" label="每两周" value="每两周"></el-option>
               <el-option key="3" label="每月" value="每月"></el-option>
               <el-option key="4" label="每季度" value="每季度"></el-option>
-              <el-option key="5" label="每年" value="每年"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <el-form-item style="width:80%;">
-          <el-button :disabled="buyForm.pay==null" type="primary" style="width:100%;margin: 20px" @click="buy(product.productId)">购买</el-button>
+          <el-button :disabled="buyForm.pay==null || buyForm.cardId==null" type="primary" style="width:100%;margin: 20px" @click="buy(product.productId)">购买</el-button>
           <el-button type="primary" v-show="!timeVisible" style="width:100%;margin: 20px" @click="timeVisible=true">定投</el-button>
           <el-button type="primary" v-show="timeVisible" style="width:100%;margin: 20px" @click="timeVisible=false">取消</el-button>
         </el-form-item>
@@ -56,72 +62,115 @@
 </template>
 
 <script>
-  import {qryproducts} from '../../api/api.js'
+  import {qryproducts, qryCardList, buyProduct} from '../../api/api.js'
   import {isvalidPay} from '../../../config/validate.js'
-    export default {
-      name: "Products",
-      created:function(){
-        console.log(JSON.parse(sessionStorage.getItem("user")).account);
-        let param = {"account": JSON.parse(sessionStorage.getItem("user")).account};
-        qryproducts(param).then((res) => {
-          let {status, product} = res;
-          if(status!="0"){
-          }else{
-            this.productList = product;
+  export default {
+    name: "Products",
+    created:function(){
+      let param = {"account": JSON.parse(sessionStorage.getItem("user")).account};
+      qryproducts(param).then((res) => {
+        let {status, product} = res;
+        if(status!="0"){
+        }else{
+          this.productList = product;
+        }
+      });
+    },
+    data () {
+      var validatePay = (rule, value, callback) => {
+        if(!value){
+          callback(new Error("请输入金额"));
+        }else if(!isvalidPay(this.product.startAmt, this.product.endAmt, value)){
+          callback(new Error("输入正确的金额"));
+        }else{
+          callback();
+        }
+      }
+
+      return {
+        dialogFormVisible: false,
+        productList: [],
+        buyForm:{
+          pay:"",
+          time: "每周",
+          cardId: ""
+        },
+        rules:{
+          pay:[{required:true,validator:validatePay,message:"请注意购买金额限制",trigger:"blur"}],
+          card:[{required:true,message:"请选择卡号",trigger:"blur"}]
+        },
+        product:{
+          productName:"",
+          startAmt: "",
+          endAmt: "",
+          productId: ""
+        },
+        notice: "",
+        timeVisible: false,
+        cardList: []
+      }
+
+    },
+    methods: {
+      buy(number, callback) {
+        if (!this.timeVisible) {
+          this.buyForm.time = "";
+        }
+        let param = {
+          "card": this.buyForm.cardId,
+          "prodId": number,
+          "amount": this.buyForm.pay,
+          "period": this.buyForm.time,
+        };
+        buyProduct(param).then((res) => {
+          let {status} = res;
+          if (status == "-1") {
+            this.$message({
+              message: "购买失败",
+              type: 'error'
+            });
+          } else {
+            this.$message({
+              message: "购买成功",
+              type: "success"
+            });
           }
         });
       },
-      data () {
-        var validatePay = (rule, value, callback) => {
-          if(!value){
-            callback(new Error("请输入金额"));
-          }else if(!isvalidPay(this.product.startAmt, this.product.endAmt, value)){
-            callback(new Error("输入正确的金额"));
-          }else{
-            callback();
-          }
+      opendialog(item){
+        this.getCardList();
+        if(!this.cardList){
+          return ;
         }
-
-        return {
-          dialogFormVisible: false,
-          productList: [],
-          buyForm:{
-            productId:"",
-            pay:"",
-            time: "每周"
-          },
-          rules:{
-            pay:[{required:true,validator:validatePay,message:"请注意购买金额限制",trigger:"blur"}]
-          },
-          product:{
-            productName:"",
-            startAmt: "",
-            endAmt: "",
-            productId: ""
-          },
-          notice: "",
-          timeVisible: false
-        }
+        this.buyForm.pay = null;
+        this.dialogFormVisible = true;
+        this.product.productName = item.productName;
+        this.product.startAmt = item.startAmt;
+        this.product.endAmt = item.endAmt;
+        this.product.productId = item.productId;
+        this.notice = "购买金额在"+ this.product.startAmt + "元与" + this.product.endAmt + "之间";
 
       },
-      methods: {
-        buy(number, callback) {
-          if (!this.buyForm.pay) {
-            alert("请输入金额");
+      getCardList() {
+        let param = {"account": JSON.parse(sessionStorage.getItem("user")).account};
+        qryCardList(param).then((res) => {
+          let {status, cards} = res;
+          if (status == "-1") {
+            this.$message({
+              message: "卡号查询失败，请检查信息",
+              type: 'error'
+            });
+          } else {
+            this.$message({
+              message: "卡号查询成功",
+              type: "success"
+            });
+            this.cardList = cards;
           }
-          console.log("number:" + number);
-        },
-        opendialog(item){
-          this.buyForm.pay = null;
-          this.dialogFormVisible = true;
-          this.product.productName = item.productName;
-          this.product.startAmt = item.startAmt;
-          this.product.endAmt = item.endAmt;
-          this.product.productId = item.productId;
-          this.notice = "购买金额在"+ this.product.startAmt + "元与" + this.product.endAmt + "之间";
-        }
+        });
       }
     }
+  }
 </script>
 
 <style scoped>
