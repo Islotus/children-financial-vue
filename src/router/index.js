@@ -4,6 +4,9 @@ import Login from '@/views/user/Login'
 import Index from '@/views/home/Index'
 import Register from '@/views/user/Register'
 import Products from '@/views/financial/Products'
+import Personal from '@/views/home/Personal'
+import Money from '@/views/user/Money'
+import Transfer from '@/views/user/Transfer'
 
 
 Vue.use(Router)
@@ -31,6 +34,30 @@ export default new Router({
       path: '/products',
       name: 'products',
       component: Products,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/personal',
+      name: 'personal',
+      component: Personal,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/money',
+      name: 'money',
+      component: Money,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/transfer',
+      name: 'transfer',
+      component: Transfer,
       meta: {
         requireAuth: true
       }
