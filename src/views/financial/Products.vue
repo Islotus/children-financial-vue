@@ -51,7 +51,7 @@
           </el-form-item>
         </div>
         <el-form-item style="width:80%;">
-          <el-button :disabled="buyForm.pay==null || buyForm.cardId==null" type="primary" style="width:100%;margin: 20px" @click="buy(product.productId)">购买</el-button>
+          <el-button :disabled="!buyForm.pay || !buyForm.cardId" type="primary" style="width:100%;margin: 20px" @click="buy(product.productId)">购买</el-button>
           <el-button type="primary" v-show="!timeVisible" style="width:100%;margin: 20px" @click="timeVisible=true">定投</el-button>
           <el-button type="primary" v-show="timeVisible" style="width:100%;margin: 20px" @click="timeVisible=false">取消</el-button>
         </el-form-item>

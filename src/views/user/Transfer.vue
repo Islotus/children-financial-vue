@@ -124,6 +124,7 @@
                 message: "转账成功",
                 type: "success"
               });
+              this.$router.go(0);
             }
           });
         }
