@@ -21,7 +21,7 @@
         </el-submenu>
         <el-submenu index="/personal">
           <template slot="title"><a style="font-size: 20px;font-family: Microsoft YaHei;font-weight: 700">个人业务</a></template>
-          <el-menu-item index="3-1" style="font-size: 16px;font-family: Microsoft YaHei">用户管理</el-menu-item>
+          <el-menu-item index="/manage" style="font-size: 16px;font-family: Microsoft YaHei">用户管理</el-menu-item>
           <el-menu-item index="/products" style="font-size: 16px;font-family: Microsoft YaHei">理财产品</el-menu-item>
           <el-menu-item index="/money" style="font-size: 16px;font-family: Microsoft YaHei">账户查询</el-menu-item>
           <el-menu-item index="/transfer" style="font-size: 16px;font-family: Microsoft YaHei">转账汇款</el-menu-item>
