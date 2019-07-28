@@ -24,7 +24,7 @@
             </el-col>
             <el-col :span="24">
               <template>
-                <el-table :data="tableData" stripe :show-header="false" style="width: 100%">
+                <el-table :data="tableData" :show-header="false" style="width: 100%">
                   <el-table-column prop="msg" label="信息" width="500"></el-table-column>
                   <el-table-column prop="date" label="时间" width="180"></el-table-column>
                 </el-table>
