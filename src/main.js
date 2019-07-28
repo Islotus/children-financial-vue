@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
     sessionStorage.removeItem('user');
   }
   let user = sessionStorage.getItem('user');
-  if(to.path != '/login' && to.path != '/index' && to.path != '/register' && !user){
+  if(to.path != '/login' && to.path != '/index' && to.path != '/register' && to.path != '/' && !user){
     //console.log("before");
     // next();
     next({path:'/login'});
