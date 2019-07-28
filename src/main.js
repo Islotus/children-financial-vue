@@ -8,18 +8,20 @@ import ElementUI, { TabPane } from 'element-ui';
 // import Mock from './mock'
 import VueResource from 'vue-resource'
 import 'element-ui/lib/theme-chalk/display.css'
+import ECharts from 'echarts'
 
 // Mock.bootstrap();
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(VueResource)
+Vue.use(ECharts)
 
 router.beforeEach((to, from, next) => {
   if(to.path == '/login'){
     sessionStorage.removeItem('user');
   }
   let user = sessionStorage.getItem('user');
-  if(to.path != '/login' && to.path != '/index' && to.path != '/register' && !user){
+  if(to.path != '/login' && to.path != '/index' && to.path != '/register' && to.path != '/' && !user){
     //console.log("before");
     // next();
     next({path:'/login'});
@@ -33,7 +35,7 @@ new Vue({
   router,
   render: h => h(App),
   components: { App },
-  template: '<App/>'
+template: '<App/>'
 })
 
 
