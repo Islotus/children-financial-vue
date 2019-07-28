@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-let base = 'http://192.168.253.3:8080/';
+// let base = 'http://192.168.253.3:8080/';
+let base = 'http://localhost:10002/';
 
 //登录
 export const requestLogin = params => { return axios.post(base + `login`, params).then(res => res.data); };
@@ -14,3 +15,6 @@ export const qryCardList = params => { return axios.post(base + `finOps/getCards
 export const buyProduct = params => { return axios.post(base + `finProd/purchaseProduct`, params).then(res => res.data); };
 //转账
 export const transferMoney = params => { return axios.post(base + `finOps/transProcess`, params).then(res => res.data); };
+
+//用户管理
+export const qrySonAcct = params => { return axios.post(base + `userMng/querySonAcct`, params).then(res => res.data); };
