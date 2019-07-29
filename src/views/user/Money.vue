@@ -18,7 +18,7 @@
                   <el-collapse-item title="查看详情">
                     <div>
                       <p class="singleMoneyFont">账户余额：<span class="singleMoneyFont">{{balance}}</span><a style="color: red"> 元</a></p>
-                      <el-button type="primary" class="buttonClass" @click="toggle(show)">查看详情</el-button>
+                      <el-button type="primary" class="buttonClass" @click="toggle()">查看详情</el-button>
                     </div>
                     <div :style="display">
                       <el-table style="width: 100%;display:block" :data="yuErList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
@@ -82,7 +82,7 @@
           currentPage:1, //初始页
           pagesize:10,    //    每页的数据
           yuErList: [],
-          display: ""
+          display: "display:none"
         }
       },
       methods: {
@@ -100,7 +100,21 @@
               this.dingTou = this.$options.methods.toThousands(DTTotalAmount);
               this.balance = this.$options.methods.toThousands(balance);
               this.totalMoney = this.$options.methods.toThousands(totalAmount);
-              console.log(totalAmount);
+              // this.licai = LCTotalAmount;
+              // this.dingTou = DTTotalAmount;
+              // this.balance = balance;
+              // this.totalMoney = totalAmount;
+              // console.log("--------------------------------");
+              // console.log(LCTotalAmount);
+              // console.log(this.licai);
+              // console.log(DTTotalAmount);
+              // console.log(this.dingTou);
+              // console.log(balance);
+              // console.log(this.balance);
+              // console.log(totalAmount);
+              // console.log(this.totalMoney);
+              // console.log("--------------------------------");
+
             }
           })
         },
@@ -128,7 +142,7 @@
             }
           })
         },
-        toggle(show) {
+        toggle() {
           if (this.display === "display:none") {
             this.display = "";
           } else {
@@ -136,11 +150,14 @@
           }
         },
         toThousands(num) {
-          // if(num.indexOf(".") <= 0){ //不含有小数点，加小数点
-          //   num = num + ".00"
+          var numStr = num.toString();
+          // if(numStr.search(".") == -1){ //不含有小数点，加小数点
+          //   console.log("不含有小数点");
+          //   numStr += ".00";
           // }
-          var num = (num || 0).toString(), result = '';
-          var left = num.split(".")[0];
+          // var numStr = (numStr || 0).toString();
+          var result = '';
+          var left = numStr.split(".")[0];
           if(left.length > 3){
             while (left.length > 3) {
               result = ',' + left.slice(-3) + result;
@@ -149,10 +166,11 @@
             if (left) {
               result = left + result;
             }
-            var right = num.split(".")[1];
+            var right = numStr.split(".")[1];
+            console.log(right);
             result = result + "." + right;
           }else{
-            result = num;
+            result = numStr;
           }
           return result;
         }
