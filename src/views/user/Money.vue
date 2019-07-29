@@ -63,15 +63,14 @@
 
 <script>
   import Left from '@/components/common/Left'
-  import {qryYuEr, qryLicaiAndDingTou, qryYuErList} from '../../api/api.js'
+  import {qryEverySingleMoney, qryYuErList} from '../../api/api.js'
     export default {
       name: "Money",
       components:{
         Left
       },
       created:function(){
-        this.getYuEr();
-        this.getLicaiAndDingTou();
+        this.getEverySingleMoney();
         this.getYuErList();
       },
       data () {
@@ -87,10 +86,10 @@
         }
       },
       methods: {
-        getLicaiAndDingTou() {
+        getEverySingleMoney(){
           let param = {"account": JSON.parse(sessionStorage.getItem("user")).account};
-          qryLicaiAndDingTou(param).then((res) => {
-            let {DTTotalAmount, LCTotalAmount, status} = res;
+          qryEverySingleMoney(param).then((res) => {
+            let {totalAmount, DTTotalAmount, balance, LCTotalAmount, status} = res;
             if (status != 0) {
               this.$message({
                 message: "理财金额和定投金额查询失败，请检查信息",
@@ -99,28 +98,9 @@
             } else {
               this.licai = this.$options.methods.toThousands(LCTotalAmount);
               this.dingTou = this.$options.methods.toThousands(DTTotalAmount);
-              this.totalMoney = LCTotalAmount;
-              console.log(this.totalMoney);
-            }
-          })
-        },
-        getYuEr() {
-          let param = {"account": JSON.parse(sessionStorage.getItem("user")).account};
-          console.log(param);
-          qryYuEr(param).then((res) => {
-            let {status, cardAmt} = res;
-            if (status == "-1") {
-              this.$message({
-                message: "账户余额查询失败，请检查信息",
-                type: 'error'
-              });
-            } else {
-              this.balance =  this.$options.methods.toThousands(cardAmt);
-
-              this.totalMoney = String(parseFloat(this.totalMoney) + parseFloat(cardAmt));
-              // var total = this.totalMoney;
-              // this.totalMoney =  this.$options.methods.toThousands(total);
-              console.log(this.totalMoney);
+              this.balance = this.$options.methods.toThousands(balance);
+              this.totalMoney = this.$options.methods.toThousands(totalAmount);
+              console.log(totalAmount);
             }
           })
         },

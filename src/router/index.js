@@ -8,6 +8,7 @@ import Personal from '@/views/home/Personal'
 import Money from '@/views/user/Money'
 import Transfer from '@/views/user/Transfer'
 import Manage from '@/views/user/Manage'
+import Settings from '@/views/user/Settings'
 
 
 Vue.use(Router)
@@ -75,6 +76,14 @@ export default new Router({
       path: '/manage',
       name: 'manage',
       component: Manage,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: Settings,
       meta: {
         requireAuth: true
       }

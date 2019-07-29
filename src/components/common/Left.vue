@@ -95,7 +95,7 @@
           {value:350, name:'理财产品', url:'/products'},
           {value:325, name:'账户查询', url:'/money'},
           {value:250, name:'转账汇款', url:'/transfer'},
-          {value:200, name:'账户设置', url:'/'}
+          {value:200, name:'账户设置', url:'/settings'}
         ].sort(function (a, b) { return a.value - b.value; }),
         roseType: 'radius',
         //饼状图的外围标签
