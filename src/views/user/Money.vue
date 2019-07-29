@@ -43,7 +43,7 @@
                       </el-pagination>
                     </div>
                     <div>
-                      <p class="singleMoneyFont">理财金额：<span class="singleMoneyFont" style="display: inline-block; width: 150px;">{{licai}}</span><a style="color: red"> 元</a></p>
+                      <p class="singleMoneyFont">基金收益：<span class="singleMoneyFont" style="display: inline-block; width: 150px;">{{licai}}</span><a style="color: red"> 元</a></p>
                       <el-button type="primary" class="buttonClass" style="background: dimgray; border-color: dimgray;" @click="buttonFunLi()">查看详情</el-button>
                     </div>
                     <div :style="displayLi">
@@ -64,7 +64,7 @@
                     </div>
 
                     <div>
-                      <p class="singleMoneyFont">定投金额：<span class="singleMoneyFont" style="display: inline-block; width: 150px;">{{dingTou}}</span><a style="color: red"> 元</a></p>
+                      <p class="singleMoneyFont">定投收益：<span class="singleMoneyFont" style="display: inline-block; width: 150px;">{{dingTou}}</span><a style="color: red"> 元</a></p>
                       <el-button type="primary" class="buttonClass" style="background: dimgray; border-color: dimgray;">查看详情</el-button>
                     </div>
                   </el-collapse-item>
@@ -107,7 +107,7 @@
           liCaiList: [],
           dingTouList: [],
           display: "display:none",
-          displayLi: "",
+          displayLi: "display:none",
           display3: "display:none"
         }
       },
