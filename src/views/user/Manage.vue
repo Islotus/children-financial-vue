@@ -91,10 +91,10 @@
               type: 'error'
             });
           } else {
-            this.$message({
-              message: "账户查询成功",
-              type: "success"
-            });
+            // this.$message({
+            //   message: "账户查询成功",
+            //   type: "success"
+            // });
             this.accountList.push(sonUserInf.account);
             this.accountList.push(param.account);
           }
