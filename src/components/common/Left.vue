@@ -16,7 +16,7 @@
     name: "Personal",
     data() {
       return {
-        chart: null
+        chart: null,
       };
     },
     methods: {
@@ -45,8 +45,7 @@
           }, 300);
         }
       });
-    },
-
+    }
   }
 
   const option = {
@@ -91,7 +90,7 @@
         //饼图生成后的位置
         center: ['50%', '50%'],
         data:[
-          {value:400, name:'用户管理', url:'/'},
+          {value:400, name:'用户管理', url:'/manage'},
           {value:350, name:'理财产品', url:'/products'},
           {value:325, name:'账户查询', url:'/money'},
           {value:250, name:'转账汇款', url:'/transfer'},
@@ -136,8 +135,8 @@
         //图表生成的随机时间
         animationDelay: function (idx) {
           return Math.random() * 200;
-        }
-      }
+        },
+  }
     ]
   };;
 </script>
