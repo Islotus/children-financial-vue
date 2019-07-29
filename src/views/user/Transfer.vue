@@ -13,7 +13,7 @@
                 </el-badge>
               </div>
               <div>
-                <el-form style="text-align:center;" :inline="true" :model="payForm" label-position="left"  class="login-container" :rules="rules" ref="payForm">
+                <el-form style="text-align:center;"  :inline="true" :model="payForm" label-position="left"  class="login-container" :rules="rules" ref="payForm">
                   <el-form-item label="转账金额" prop="pay" style="margin-top: 50px">
                     <el-input type="text" auto-complete="off" :placeholder=notice v-model="payForm.pay"></el-input>
                   </el-form-item>

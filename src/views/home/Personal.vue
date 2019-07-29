@@ -27,6 +27,9 @@
         o.style.height= height+"px";
         this.chart = echarts.init(o,'macarons');
         this.chart.setOption(option);
+        this.chart.on('click',(e)=>{
+          window.location.href = e.data.url;
+        })
       }
     },
     mounted() {
@@ -86,10 +89,10 @@
         //饼图生成后的位置
         center: ['50%', '50%'],
         data:[
-          {value:400, name:'用户管理'},
-          {value:350, name:'理财产品'},
-          {value:325, name:'账户查询'},
-          {value:250, name:'转账汇款'},
+          {value:400, name:'用户管理', url:'/manage'},
+          {value:350, name:'理财产品', url:'/products'},
+          {value:325, name:'账户查询', url:'/money'},
+          {value:250, name:'转账汇款', url:'/transfer'},
           {value:200, name:'账户设置'}
         ].sort(function (a, b) { return a.value - b.value; }),
         roseType: 'radius',
