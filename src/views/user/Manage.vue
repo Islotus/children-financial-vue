@@ -20,28 +20,46 @@
 <!--                  <el-input type="text" auto-complete="off" :placeholder=notice v-model="payForm.pay"></el-input>-->
 <!--                </el-form-item>-->
                 <div style="text-align:center;margin-top: 20px">
-                  <el-form-item label="账户" prop="card">
+                  <el-form-item label="操作账户" prop="card">
                     <el-select v-model="selectedAccount" placeholder="选择账户"  @change="judgeIsParent">
                       <el-option v-for="item in accountList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                   </el-form-item>
                 </div>
-<!--                <el-form-item label="目标卡号" prop="toCard" style="margin-top: 50px">-->
-<!--                  <el-input type="text" auto-complete="off" placeholder="请输入转账对象卡号" v-model="payForm.toCard"></el-input>-->
-<!--                </el-form-item>-->
+                <div style="width:20%" align="center">
+                  <el-popover
+                    placement="left"
+                    width="400"
+                    trigger="click">
+                    <el-form style="text-align:center;"  :inline="true" :model="payForm" label-position="left"  class="login-container" :rules="rules" ref="payForm">
+                      <el-form-item label="转账金额" prop="pay" style="margin-top: 50px">
+                        <el-input type="text" auto-complete="off" :placeholder=notice v-model="payForm.pay"></el-input>
+                      </el-form-item>
+                      <el-form-item label="转账周期" prop="time">
+                        <el-select v-model="payForm.time" placeholder="周期">
+                          <el-option key="1" label="每周" value="每周"></el-option>
+                          <el-option key="2" label="每两周" value="每两周"></el-option>
+                          <el-option key="3" label="每月" value="每月"></el-option>
+                          <el-option key="4" label="每季度" value="每季度"></el-option>
+                        </el-select>
+                      </el-form-item>
+                      <el-form-item style="width:80%;">
+                        <el-button :disabled="!payForm.pay || !payForm.time"
+                                   type="primary" style="width:100%;margin: 20px" @click="timeTrans">转账</el-button>
+                      </el-form-item>
+                    </el-form>
+                    <el-button slot="reference" v-show="isParent==0"  :disabled="!selectedAccount"
+                               type="primary" class="buttonClass" style = "width:136px;margin-left: 265px">定时转账</el-button>
+                  </el-popover>
+                </div>
+
                 <el-form-item style="width:20%;">
-<!--                  <el-form-item style="margin: 20px 0;">-->
-<!--                  <div>-->
-                    <el-button :disabled="!selectedAccount || isParent == 1"
-                               type="primary" class="buttonClass" @click="timeTrans" onclick="">定时转账</el-button>
+                    <el-button :disabled="!selectedAccount"
+                               type="primary" class="buttonClass" @click="queryBalance">查询余额</el-button>
 <!--                  </div>-->
 <!--                  <div>-->
                     <el-button :disabled="!selectedAccount"
-                               type="primary" class="buttonClass" @click="queryBalance" onclick="">查询余额</el-button>
-<!--                  </div>-->
-<!--                  <div>-->
-                    <el-button :disabled="!selectedAccount"
-                               type="primary" class="buttonClass" @click="accountSet" onclick="">账户设置</el-button>
+                               type="primary" class="buttonClass" @click="accountSet">账户设置</el-button>
 <!--                  </div>-->
                 </el-form-item>
 
@@ -71,7 +89,7 @@
       var validatePay = (rule, value, callback) => {
         if(!value){
           callback(new Error("请输入金额"));
-        }else if(!isvalidPay("0", "10000", value)){
+        }else if(!isvalidPay("0", "20000", value)){
           callback(new Error("输入正确的金额"));
         }else{
           callback();
@@ -80,17 +98,17 @@
       return {
         rules:{
           pay:[{required:true,validator:validatePay,message:"请注意转账限额",trigger:"blur"}],
-          card:[{required:true,message:"请选择转账卡号",trigger:"blur"}],
-          toCard:[{required:true,message:"请输入对方卡号",trigger:"blur"}]
+          time:[{required:true,message:"定时转账",trigger:"blur"}]
         },
         notice: "",
         selectedAccount:"",
         isParent:"",
         accountList: [],
         payForm: {
-          card: "",
-          toCard: "",
-          pay: ""
+          card:"",
+          pay: "",
+          time:"",
+          toCard:""
         }
       }
     },
@@ -98,19 +116,17 @@
       getSonAcct() {
         let param = {"account": JSON.parse(sessionStorage.getItem("user")).account};
         qrySonAcct(param).then((res) => {
-          let {status, sonUserInf, cardAmt, finAmt} = res;
+          let {status, sonUserInf, cardAmt, finAmt, pCardNbr, sCardNbr} = res;
           if (status == "-1") {
             this.$message({
-              message: "账户查询失败，请检查信息",
+              message: "目前账号未绑定子账户",
               type: 'error'
             });
           } else {
-            // this.$message({
-            //   message: "账户查询成功",
-            //   type: "success"
-            // });
             this.accountList.push(sonUserInf.account);
             this.accountList.push(param.account);
+            this.payForm.toCard = sCardNbr;
+            this.payForm.card = pCardNbr;
           }
         });
       },
@@ -123,7 +139,36 @@
         else this.isParent = 1;
       },
       timeTrans(){
-
+        let param = {
+          "fromCard": this.payForm.card,
+          "toCard": this.payForm.toCard,
+          "amount": this.payForm.pay
+        };
+        transferMoney(param).then((res) => {
+          let {status} = res;
+          if (status == "-1") {
+            this.$message({
+              message: "账户余额不足",
+              type: 'error'
+            });
+          }else if (status == "-2") {
+            this.$message({
+              message: "转出户不存在",
+              type: 'error'
+            });
+          } else if (status == "-3") {
+            this.$message({
+              message: "今日额度已用完",
+              type: 'error'
+            });
+          } else {
+            this.$message({
+              message: "转账成功",
+              type: "success"
+            });
+            this.$router.go(0);
+          }
+        });
       },
       queryBalance(){
 

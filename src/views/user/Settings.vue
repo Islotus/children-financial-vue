@@ -57,10 +57,10 @@
 
       data() {
         return {
-          value1: true,
-          value2: true,
-          value3: true,
-          value4: true
+          value1: false,
+          value2: false,
+          value3: false,
+          value4: false
         }
       },
       methods: {
