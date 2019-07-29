@@ -43,7 +43,7 @@
                       </el-pagination>
                     </div>
                     <div>
-                      <p class="singleMoneyFont">理财收益：<span class="singleMoneyFont" style="display: inline-block; width: 150px;">{{licai}}</span><a style="color: red"> 元</a></p>
+                      <p class="singleMoneyFont">基金收益：<span class="singleMoneyFont" style="display: inline-block; width: 150px;">{{licai}}</span><a style="color: red"> 元</a></p>
                       <el-button type="primary" class="buttonClass" style="background: dimgray; border-color: dimgray;" @click="buttonFunLi()">查看详情</el-button>
                     </div>
                     <div :style="displayLi">
