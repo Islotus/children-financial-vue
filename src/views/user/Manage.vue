@@ -21,7 +21,7 @@
 <!--                </el-form-item>-->
                 <div style="text-align:center;margin-top: 20px">
                   <el-form-item label="账户" prop="card">
-                    <el-select v-model="payForm.card" placeholder="选择账户" >
+                    <el-select v-model="selectedAccount" placeholder="选择账户"  @change="judgeIsParent">
                       <el-option v-for="item in accountList" :key="item" :label="item" :value="item"></el-option>
                     </el-select>
                   </el-form-item>
@@ -29,10 +29,22 @@
 <!--                <el-form-item label="目标卡号" prop="toCard" style="margin-top: 50px">-->
 <!--                  <el-input type="text" auto-complete="off" placeholder="请输入转账对象卡号" v-model="payForm.toCard"></el-input>-->
 <!--                </el-form-item>-->
-                <el-form-item style="width:80%;">
-                  <el-button :disabled="!payForm.pay || !payForm.card || !payForm.toCard"
-                             type="primary" style="width:100%;margin: 20px" @click="transfer">确认</el-button>
+                <el-form-item style="width:20%;">
+<!--                  <el-form-item style="margin: 20px 0;">-->
+<!--                  <div>-->
+                    <el-button :disabled="!selectedAccount || isParent == 1"
+                               type="primary" class="buttonClass" @click="timeTrans" onclick="">定时转账</el-button>
+<!--                  </div>-->
+<!--                  <div>-->
+                    <el-button :disabled="!selectedAccount"
+                               type="primary" class="buttonClass" @click="queryBalance" onclick="">查询余额</el-button>
+<!--                  </div>-->
+<!--                  <div>-->
+                    <el-button :disabled="!selectedAccount"
+                               type="primary" class="buttonClass" @click="accountSet" onclick="">账户设置</el-button>
+<!--                  </div>-->
                 </el-form-item>
+
               </el-form>
             </div>
           </el-card>
@@ -72,6 +84,8 @@
           toCard:[{required:true,message:"请输入对方卡号",trigger:"blur"}]
         },
         notice: "",
+        selectedAccount:"",
+        isParent:"",
         accountList: [],
         payForm: {
           card: "",
@@ -100,37 +114,32 @@
           }
         });
       },
-      transfer() {
-        let param = {
-          "fromCard": this.payForm.card,
-          "toCard": this.payForm.toCard,
-          "amount": this.payForm.pay
-        };
-        transferMoney(param).then((res) => {
-          let {status} = res;
-          if (status == "-1") {
-            this.$message({
-              message: "账户余额不足",
-              type: 'error'
-            });
-          }else if (status == "-2") {
-            this.$message({
-              message: "转出户不存在",
-              type: 'error'
-            });
-          } else if (status == "-3") {
-            this.$message({
-              message: "今日额度已用完",
-              type: 'error'
-            });
-          } else {
-            this.$message({
-              message: "转账成功",
-              type: "success"
-            });
-            this.$router.go(0);
-          }
-        });
+      judgeIsParent() {
+        console.log("change");
+        let param = {"account": JSON.parse(sessionStorage.getItem("user")).account};
+        if(param.account != this.selectedAccount){
+          this.isParent = 0;
+        }
+        else this.isParent = 1;
+      },
+      timeTrans(){
+
+      },
+      queryBalance(){
+
+        if(this.isParent == 1) {
+          window.location.href = "money";
+        }
+        else {
+          sessionStorage.setItem("subAccount",this.selectedAccount);
+          window.location.href = "subMoney";
+        }
+      },
+      accountSet(){
+        window.location.href = "settings";
+      },
+      confirm() {
+
       }
     }
   }
@@ -138,5 +147,9 @@
 </script>
 
 <style scoped>
-
+.buttonClass{
+  width:100%;
+  margin: 20px;
+  display: inline-block;
+}
 </style>

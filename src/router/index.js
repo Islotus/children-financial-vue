@@ -9,6 +9,7 @@ import Money from '@/views/user/Money'
 import Transfer from '@/views/user/Transfer'
 import Manage from '@/views/user/Manage'
 import Settings from '@/views/user/Settings'
+import SubMoney from "../views/user/SubMoney";
 
 
 Vue.use(Router)
@@ -84,6 +85,14 @@ export default new Router({
       path: '/settings',
       name: 'settings',
       component: Settings,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/subMoney',
+      name: 'subMoney',
+      component: SubMoney,
       meta: {
         requireAuth: true
       }
