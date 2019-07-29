@@ -7,6 +7,7 @@ import Products from '@/views/financial/Products'
 import Personal from '@/views/home/Personal'
 import Money from '@/views/user/Money'
 import Transfer from '@/views/user/Transfer'
+import Manage from '@/views/user/Manage'
 
 
 Vue.use(Router)
@@ -66,6 +67,14 @@ export default new Router({
       path: '/transfer',
       name: 'transfer',
       component: Transfer,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: '/manage',
+      name: 'manage',
+      component: Manage,
       meta: {
         requireAuth: true
       }
