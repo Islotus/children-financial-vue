@@ -17,8 +17,8 @@
                 <el-collapse>
                   <el-collapse-item title="查看详情">
                     <div>
-                      <p class="singleMoneyFont">账户余额：<span class="singleMoneyFont">{{balance}}</span><a style="color: red"> 元</a></p>
-                      <el-button type="primary" class="buttonClass" @click="toggle()">查看详情</el-button>
+                      <p class="singleMoneyFont">账户余额：<span class="singleMoneyFont" style="display: inline-block; width: 150px;">{{balance}}</span><a style="color: red"> 元</a></p>
+                      <el-button type="primary" class="buttonClass" style="background: dimgray; border-color: dimgray;" @click="buttonFun()">查看详情</el-button>
                     </div>
                     <div :style="display">
                       <el-table style="width: 100%;display:block" :data="yuErList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
@@ -43,12 +43,29 @@
                       </el-pagination>
                     </div>
                     <div>
-                      <p class="singleMoneyFont">理财金额：<span class="singleMoneyFont">{{licai}}</span><a style="color: red"> 元</a></p>
-                      <el-button type="primary" class="buttonClass">查看详情</el-button>
+                      <p class="singleMoneyFont">理财金额：<span class="singleMoneyFont" style="display: inline-block; width: 150px;">{{licai}}</span><a style="color: red"> 元</a></p>
+                      <el-button type="primary" class="buttonClass" style="background: dimgray; border-color: dimgray;" @click="buttonFunLi()">查看详情</el-button>
                     </div>
+                    <div :style="displayLi">
+                      <el-table style="width: 100%;display:block" :data="liCaiList.slice((currentPageLi-1)*pagesizeLi,currentPageLi*pagesizeLi)">
+                        <el-table-column label="理财产品名称" prop="prodName" width="160"></el-table-column>
+                        <el-table-column label="年利率" prop="rate" width="120"></el-table-column>
+                        <el-table-column label="收益（元）" prop="profit" width="120"></el-table-column>
+                      </el-table>
+                      <el-pagination
+                        @size-change="handleSizeChangeLi"
+                        @current-change="handleCurrentChangeLi"
+                        :current-page="currentPageLi"
+                        :page-sizes="[5, 10, 20, 40]"
+                        :page-size="pagesizeLi"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="liCaiList.length">
+                      </el-pagination>
+                    </div>
+
                     <div>
-                      <p class="singleMoneyFont">定投金额：<span class="singleMoneyFont">{{dingTou}}</span><a style="color: red"> 元</a></p>
-                      <el-button type="primary" class="buttonClass">查看详情</el-button>
+                      <p class="singleMoneyFont">定投金额：<span class="singleMoneyFont" style="display: inline-block; width: 150px;">{{dingTou}}</span><a style="color: red"> 元</a></p>
+                      <el-button type="primary" class="buttonClass" style="background: dimgray; border-color: dimgray;">查看详情</el-button>
                     </div>
                   </el-collapse-item>
                 </el-collapse>
@@ -63,7 +80,7 @@
 
 <script>
   import Left from '@/components/common/Left'
-  import {qryEverySingleMoney, qryYuErList} from '../../api/api.js'
+  import {qryEverySingleMoney, qryYuErList, qryLiCaiList} from '../../api/api.js'
     export default {
       name: "Money",
       components:{
@@ -72,6 +89,7 @@
       created:function(){
         this.getEverySingleMoney();
         this.getYuErList();
+        this.getLiCaiList();
       },
       data () {
         return {
@@ -81,8 +99,16 @@
           dingTou:"",
           currentPage:1, //初始页
           pagesize:10,    //    每页的数据
+          currentPageLi:1,
+          pagesizeLi:10,
+          currentPage3:1, //初始页
+          pagesize3:10,    //    每页的数据
           yuErList: [],
-          display: "display:none"
+          liCaiList: [],
+          dingTouList: [],
+          display: "display:none",
+          displayLi: "",
+          display3: "display:none"
         }
       },
       methods: {
@@ -127,6 +153,22 @@
           this.currentPage = currentPage;
           console.log(this.currentPage)  //点击第几页
         },
+        handleSizeChangeLi: function (size) {
+          this.pagesizeLi = size;
+          console.log(this.pagesizeLi)  //每页下拉显示数据
+        },
+        handleCurrentChangeLi: function (currentPage) {
+          this.currentPageLi = currentPage;
+          console.log(this.currentPageLi)  //点击第几页
+        },
+        handleSizeChange3: function (size) {
+          this.pagesize3 = size;
+          console.log(this.pagesize3)  //每页下拉显示数据
+        },
+        handleCurrentChange3: function (currentPage) {
+          this.currentPage3 = currentPage;
+          console.log(this.currentPage3)  //点击第几页
+        },
         getYuErList() {
           let param = {"account": JSON.parse(sessionStorage.getItem("user")).account, "pn": "1", "ps": "1000"};
           console.log(param);
@@ -141,6 +183,35 @@
               this.yuErList = lsList;
             }
           })
+        },
+        getLiCaiList() {
+          let param = {"account": JSON.parse(sessionStorage.getItem("user")).account, "pn": "1", "ps": "1000"};
+          console.log(param);
+          qryLiCaiList(param).then((res) => {
+            let {result,status} = res;
+            if (status == "-1") {
+              this.$message({
+                message: "余额流水查询失败，请检查信息",
+                type: 'error'
+              });
+            } else {
+              this.liCaiList = result;
+            }
+          })
+        },
+        buttonFun(){
+          if (this.display === "display:none") {
+            this.display = "";
+          } else {
+            this.display = "display:none";
+          }
+        },
+        buttonFunLi(){
+          if (this.displayLi === "display:none") {
+            this.displayLi = "";
+          } else {
+            this.displayLi = "display:none";
+          }
         },
         toggle() {
           if (this.display === "display:none") {
