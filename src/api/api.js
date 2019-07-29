@@ -22,7 +22,8 @@ export const transferMoney = params => { return axios.post(base + `finOps/transP
 export const qryEverySingleMoney = params => { return axios.post(base + `finProd/querySumPropertyByAccount`, params).then(res => res.data); };
 //查询账户余额流水
 export const qryYuErList = params => { return axios.post(base + `userMng/queryLsInf`, params).then(res => res.data); };
-
 //用户管理
 export const qrySonAcct = params => { return axios.post(base + `userMng/querySonAcct`, params).then(res => res.data); };
+//查询理财流水
+export const qryLiCaiList = params => { return axios.post(base + `userMng/queryFinDetail`, params).then(res => res.data); };
 
