@@ -8,10 +8,10 @@
       <el-form :model="userForm" label-position="left" label-width="0px" class="login-container" :rules="rules" ref="loginForm">
         <h3 class="title" style="text-align: center">系统登录</h3>
         <el-form-item label="账号" prop="account" label-width="60px">
-          <el-input type="text" auto-complete="off" placeholder="账号" v-model="userForm.account"></el-input>
+          <el-input type="text" auto-complete="off" placeholder="账号" v-model="userForm.account" value="1111111"></el-input>
         </el-form-item>
         <el-form-item prop="psw" label="密码" label-width="60px">
-          <el-input type="password" auto-complete="off" placeholder="密码" v-model="userForm.psw"></el-input>
+          <el-input type="password" auto-complete="off" placeholder="密码" v-model="userForm.psw" value="123455"></el-input>
         </el-form-item>
         <el-form-item style="width:100%;">
           <el-button type="primary" style="width:100%;" @click="loginClick">登录</el-button>

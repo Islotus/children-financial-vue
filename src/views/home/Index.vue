@@ -37,7 +37,7 @@
           <el-row :gutter="20" >
             <el-col :span="6" v-for="item in footimgs" :key="item.id">
               <div style="padding: 14px;"><span class="vertical">&nbsp;</span><span class="fontstyle">{{item.con}}</span></div>
-              <el-image :src="item.img" :fit="fit" class="around-white"></el-image>
+              <el-image :src="item.img" class="around-white"></el-image>
             </el-col>
           </el-row>
         </div>
@@ -90,7 +90,7 @@
 
   .el-row {
     margin-bottom: 20px;
-  &:last-child {
+    &:last-child {
      margin-bottom: 0;
    }
   }

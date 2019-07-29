@@ -88,10 +88,10 @@
                 type: 'error'
               });
             } else {
-              this.$message({
-                message: "卡号查询成功",
-                type: "success"
-              });
+              // this.$message({
+              //   message: "卡号查询成功",
+              //   type: "success"
+              // });
               this.cardList = cards;
             }
           });
