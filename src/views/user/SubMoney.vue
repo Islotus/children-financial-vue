@@ -17,8 +17,8 @@
               <el-collapse>
                 <el-collapse-item title="查看详情">
                   <div>
-                    <p class="singleMoneyFont">账户余额：<span class="singleMoneyFont">{{balance}}</span><a style="color: red"> 元</a></p>
-                    <el-button type="primary" class="buttonClass" @click="toggle()">查看详情</el-button>
+                    <p class="singleMoneyFont">账户余额：<span class="singleMoneyFont" style="display: inline-block; width: 130px;">{{balance}}</span><a style="color: red"> 元</a></p>
+                    <el-button type="primary" class="buttonClass" style="background: dimgray; border-color: dimgray;" @click="toggle()">查看详情</el-button>
                   </div>
                   <div :style="display">
                     <el-table style="width: 100%;display:block" :data="yuErList.slice((currentPage-1)*pagesize,currentPage*pagesize)">
@@ -43,12 +43,12 @@
                     </el-pagination>
                   </div>
                   <div>
-                    <p class="singleMoneyFont">理财金额：<span class="singleMoneyFont">{{licai}}</span><a style="color: red"> 元</a></p>
-                    <el-button type="primary" class="buttonClass">查看详情</el-button>
+                    <p class="singleMoneyFont">理财金额：<span class="singleMoneyFont" style="display: inline-block; width: 130px;">{{licai}}</span><a style="color: red"> 元</a></p>
+                    <el-button type="primary" class="buttonClass" style="background: dimgray; border-color: dimgray;">查看详情</el-button>
                   </div>
                   <div>
-                    <p class="singleMoneyFont">定投金额：<span class="singleMoneyFont">{{dingTou}}</span><a style="color: red"> 元</a></p>
-                    <el-button type="primary" class="buttonClass">查看详情</el-button>
+                    <p class="singleMoneyFont">定投金额：<span class="singleMoneyFont" style="display: inline-block; width: 130px;">{{dingTou}}</span><a style="color: red"> 元</a></p>
+                    <el-button type="primary" class="buttonClass" style="background: dimgray; border-color: dimgray;">查看详情</el-button>
                   </div>
                 </el-collapse-item>
               </el-collapse>
